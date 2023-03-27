@@ -1,0 +1,109 @@
+import {
+  Platform,
+  findNodeHandle,
+  AccessibilityInfo,
+  UIManager,
+} from 'react-native';
+import {Strings} from '../config';
+
+export default class VoiceOverUtils {
+  static getAccessibilityContentForPage(content) {
+    return `${content} ${Strings.SCREEN}`;
+  }
+  static getAccessibilityContentForButton(content) {
+    return `${content}`;
+  }
+  static getAccessibilityContentForShare(content) {
+    return `${content}.`;
+  }
+  static getAccessibilityContentToNavNextScreen(content) {
+    return `${content}.${Strings.TAP_NAVIGATION_TO_NEXT}`;
+  }
+
+  static getAccessibilityContentForNavigationButton(content) {
+    return `${content}. ${Strings.TAP_NAVIGATION}`;
+  }
+  static getAccessibilityContentForSearch(content) {
+    return `${content}.`;
+  }
+  static getAccessibilityForCart(content, count) {
+    return count > 0 ? `${content} ${Strings.CART_ITEM}` : `${content}`;
+  }
+
+  static getAccessibilityContentForBackButton(content) {
+    return `${content}. ${Strings.BACK_NAVIGATION}`;
+  }
+
+  static getAccessibilityContentForImageButton(content) {
+    return `${content} ${Strings.TAP_BACK}`;
+  }
+
+  static getAccessibilityContentForDisableButton(content) {
+    return `${content}.`;
+  }
+
+  static getAccessibilityContentForTextField(content) {
+    return `${content}.`;
+  }
+  static getAccessibilityContentForPasswordToggle(content, state) {
+    return `${content}    ${state ? Strings.SHOWING : Strings.HIDDEN}. ${
+      Strings.DOUBLE_TAP
+    } ${state ? Strings.HIDE : Strings.SHOW}`;
+  }
+
+  static getAccessibilityContentForCheckbox(content, state) {
+    return `${content}  ${Strings.CHECKBOX} ${
+      state ? Strings.CHECKED : Strings.UNCHECKED
+    }. ${Strings.DOUBLE_TAP} ${state ? Strings.UN_CHECK : Strings.CHECK}`;
+  }
+
+  static getAccessibilityContentForRadioButton(content, state) {
+    return `${content} ${state ? Strings.SELECTED : Strings.NOT_SELECTED}. ${
+      state ? '' : Strings.DOUBLE_TAP + Strings.SELECT
+    }`;
+  }
+
+  static getAccessibilityContentForActivate(content) {
+    return `${content}. double tap to activate`;
+  }
+
+  static getAccessibilityContentForSwitch(content, state) {
+    return `${content}. Double tap to Turn  ${state ? 'Off' : 'On'}`;
+  }
+  //For Rating
+  static getAccessibilityContentForRatingImage(content) {
+    return `double tap to rate  ${content} of 5`;
+  }
+
+  static getAccessibilityContentForExpand(content) {
+    return `${content}. Double tap to expand!`;
+  }
+
+  static getAccessibilityContentForSelect(content) {
+    return `${content}  button  double tap to Select`;
+  }
+
+  static getAccessibilityContentForTiles(content) {
+    return `${content}  double tap to activate`;
+  }
+
+  static getAccessibilityContentForLink(content) {
+    return `${content}  link double tap to open`;
+  }
+
+  static setAccessibilityFocusTo(object) {
+    if (object) {
+      try {
+        const reactTag = findNodeHandle(object);
+        if (Platform.OS === 'ios') {
+          AccessibilityInfo.setAccessibilityFocus(reactTag);
+        } else {
+          UIManager.sendAccessibilityEvent(
+            reactTag,
+            UIManager.AccessibilityEventTypes.typeViewFocused,
+          );
+        }
+      } catch (e) {}
+    }
+  }
+}
